@@ -1,7 +1,22 @@
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from.models import Student, Teacher, SchoolClass
+
+def home(request):
+    return render(request, 'main.html')
+
+def login(request):
+
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST) 
+        if form.is_valid():
+            #something
+            return redirect('schoolapp:students')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'teachers/login.html', {'form': form})
 
 def students(request):
     student = Student.objects.order_by('student_id')

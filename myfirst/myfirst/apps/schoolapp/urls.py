@@ -1,9 +1,15 @@
 from django.urls import path
 
 from . import views
+from django.conf.urls import url
 
 app_name = 'schoolapp'
 urlpatterns = [
+    path('', views.home, name = 'Home'),
+
+    url(r'^login/$', views.login, name='login'),
+    #url(r'^logout/$', views.logout, name='logout'),
+
     path('students', views.students, name = 'student'),
     path('students/<int:student_id>/', views.student_details, name = 'student_details'),
 

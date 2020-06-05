@@ -5,3 +5,10 @@ table, th, td {
 .text-5xl{
     text-align: center;
 }
+
+.loginbox{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
