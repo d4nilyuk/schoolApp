@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Title
+
+{% endblock %}
+
+{% block content %}
+
+    {% if student %}
+        {% for a in student %}
+            <table style="width:100%">
+                <tr>
+                    <th>Student First Name</th>
+                    <th>Student Last Name</th>
+                    <th>Student ID</th>
+                </tr>
+                <tr>
+                    <a href="{% url 'schoolapp:student_details' a.id %}">{{a.last_name}}</a>
+                    <a href="{% url 'schoolapp:student_details' a.id %}">{{a.last_name}}</a>
+                    <a href="{% url 'schoolapp:student_details' a.id %}">{{a.student_id}}</a>
+                </tr>
+            </table>
+            
+        {% endfor %}
+
+    {% else %}
+        No students found in the database
+    {% endif %}
+
+{% endblock %}

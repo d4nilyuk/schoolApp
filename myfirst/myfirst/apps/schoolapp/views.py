@@ -1,18 +1,16 @@
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
 
-
 from.models import Student, Teacher, SchoolClass
 
-def teacher(request, teacher_id):
-    teachers_list = Teacher.objects.order_by('last_name')
-    return render(request, 'content/teachers.html'), {'teachers_list': teachers_list}
+def index(request):
+    student = Student.objects.order_by('student_id')
+    return render(request, 'students/students.html', {'student': student})
 
-def student(request, student_id):
-    students_list = Teacher.objects.order_by('last_name')
-    return render(request, 'content/students.html'), {'students_list': students_list}
-
-def schoolclass(request, schoolclass_id):
-    schoolclasses_list = Teacher.objects.order_by('class_id')
-    return render(request, 'content/schoolclass.html'), {'schoolclasses_list': schoolclasses_list}
-
+def student_details(request, student_id):
+    try:
+        a = Student.objects.get(id = student_id)
+    except:
+        raise Http404("Student is not found")
+    
+    return render(request, 'students/students.html', {'student': a}) 
