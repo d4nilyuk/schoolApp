@@ -9,12 +9,21 @@ class Teacher(models.Model):
 
     def __str__(self):
         return self.last_name
+    
+    class Meta:
+        verbose_name = 'Teacher'
+        verbose_name_plural = 'Teachers'
 
 class SchoolClass(models.Model):
     class_id = models.IntegerField()
 
     def __str__(self):
         return self.class_id
+    
+    class Meta:
+        verbose_name = 'Class'
+        verbose_name_plural = 'Classes'
+
 
 class Student(models.Model):
     schoolClass = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
@@ -26,4 +35,8 @@ class Student(models.Model):
 
     def __str__(self):
         return self.schoolClass
+    
+    class Meta:
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
 
