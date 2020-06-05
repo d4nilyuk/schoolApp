@@ -3,8 +3,9 @@ from django.db import models
 # Create your models here.
 
 class Teacher(models.Model):
-    first_name = models.CharField('Teacher First name', max_length = 100)
-    last_name = models.CharField('Teacher Last name', max_length = 100)
+    first_name = models.CharField('Teacher First name', max_length = 30)
+    last_name = models.CharField('Teacher Last name', max_length = 30)
+    teacher_id = models.IntegerField()
     hourlyRate = models.IntegerField()
 
     def __str__(self):
@@ -15,10 +16,11 @@ class Teacher(models.Model):
         verbose_name_plural = 'Teachers'
 
 class SchoolClass(models.Model):
-    class_id = models.IntegerField()
+    schoolclass_id = models.IntegerField()
+    schoolclass_name = models.CharField('Class name', max_length = 30)
 
     def __str__(self):
-        return self.class_id
+        return self.schoolclass_name
     
     class Meta:
         verbose_name = 'Class'
@@ -27,14 +29,15 @@ class SchoolClass(models.Model):
 
 class Student(models.Model):
     schoolClass = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
-    first_name = models.CharField('Student First name', max_length = 100)
-    last_name = models.CharField('Student Last name', max_length = 100)
+    first_name = models.CharField('Student First name', max_length = 30)
+    last_name = models.CharField('Student Last name', max_length = 30)
     enrolNum = models.IntegerField()
     details = models.TextField('Student Details')
     attendence = models.BooleanField()
+    student_id = models.IntegerField()
 
     def __str__(self):
-        return self.schoolClass
+        return self.last_name
     
     class Meta:
         verbose_name = 'Student'
