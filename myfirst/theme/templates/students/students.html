@@ -14,14 +14,12 @@ Title
                 <tr>
                     <th>Firstname</th>
                     <th>Lastname</th>
-                    <th>Student ID</th>
                 </tr>
             </tr>
             {% for a in student %}
                 <tr>
                     <td><a href="{% url 'schoolapp:student_details' a.id %}">{{a.first_name}}</a></td>
                     <td><a href="{% url 'schoolapp:student_details' a.id %}">{{a.last_name}}</a></td>
-                    <td><a href="{% url 'schoolapp:student_details' a.id %}">{{a.student_id}}</a></td>
                 </tr>
             {% endfor %}  
         </table>

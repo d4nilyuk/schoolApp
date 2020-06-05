@@ -13,14 +13,12 @@ Title
             <tr>
                 <th>First name</th>
                 <th>Last name</th>
-                <th>Teacher ID</th>
                 <th>Hourly rate</th>
             </tr>
             {% for a in teacher %}
                 <tr>
                     <td><a href="{% url 'schoolapp:teacher_details' a.id %}">{{a.first_name}}</a></td>
                     <td><a href="{% url 'schoolapp:teacher_details' a.id %}">{{a.last_name}}</a></td>
-                    <td><a href="{% url 'schoolapp:teacher_details' a.id %}">{{a.teacher_id}}</a></td>
                     <td><a href="{% url 'schoolapp:teacher_details' a.id %}">{{a.hourlyRate}}</a></td>
                 </tr>
             {% endfor %}  

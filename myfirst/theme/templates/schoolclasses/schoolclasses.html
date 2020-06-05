@@ -12,12 +12,10 @@ Title
         <table style="width:100%">
             <tr>
                 <th>Class Title</th>
-                <th>Class ID</th>
             </tr>
             {% for a in schoolclass %}
                 <tr>
-                    <td><a href="{% url 'schoolapp:schoolclass_details' a.id %}">{{a.schoolclass_name}}</a></td>
-                    <td><a href="{% url 'schoolapp:schoolclass_details' a.id %}">{{a.schoolclass_id}}</a></td>
+                    <td>{{a.schoolclass_name}}</td>
                 </tr>
             {% endfor %}  
             </table>
