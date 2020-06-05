@@ -5,9 +5,9 @@ from django.conf.urls import url
 
 app_name = 'schoolapp'
 urlpatterns = [
-    path('', views.home, name = 'Home'),
+    path('home', views.home, name = 'home'),
 
-    url(r'^login/$', views.login, name='login'),
+    url(r'^login/$', views.login_view, name='login'),
     #url(r'^logout/$', views.logout, name='logout'),
 
     path('students', views.students, name = 'student'),
