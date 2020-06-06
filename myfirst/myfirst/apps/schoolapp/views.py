@@ -1,13 +1,13 @@
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 from.models import Student, Teacher, SchoolClass
 from django.template.response import TemplateResponse
 
 def home(request):
-    return TemplateResponse(request, 'base.html', {'redirect_url': 'base.html'})
+    return TemplateResponse(request, 'home.html', {'redirect_url': 'home.html'})
 
 def students(request):
     student = Student.objects.order_by('student_id')
@@ -24,6 +24,12 @@ def login_view(request):
     else:
         form = AuthenticationForm()
     return render(request, 'teachers/login.html', {'form': form})
+
+def logout_view(request):
+    if request.method == 'POST':
+        login(request)
+        return redirect('schoolapp:home')
+    return TemplateResponse(request, 'home.html', {'redirect_url': 'home.html'})
 
 def teachers(request):
     teacher = Teacher.objects.order_by('teacher_id')

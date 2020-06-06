@@ -2,13 +2,3 @@ table, th, td {
     border: 1px solid black;
 }
 
-.text-5xl{
-    text-align: center;
-}
-
-.loginbox{
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}

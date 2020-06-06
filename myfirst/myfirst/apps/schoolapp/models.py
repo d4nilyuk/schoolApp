@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 from enum import unique
 
 # Create your models here.
@@ -20,6 +21,8 @@ class Teacher(models.Model):
     teacher_id = models.IntegerField(unique=True)
     hourlyRate = models.IntegerField()
     lesson = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
+    username = models.CharField(max_length=20, unique=True)
+    password = models.CharField(forms.PasswordInput, max_length=20)
 
     def __str__(self):
         return self.last_name

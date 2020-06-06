@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -7,7 +8,8 @@
       <title>School Manager</title>
       <meta name="description" content="">
       <meta name="keywords" content="">
-      <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
+	  <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
+	  <link rel="stylesheet" href="{% static 'css/main.css' %}">
       <!--Replace with your tailwind.css once created-->
       <style>
          @import url('https://fonts.googleapis.com/css?family=Lato');
@@ -32,12 +34,24 @@
                </button>
             </div>
             <div class="w-full flex-grow lg:flex  lg:content-center lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 z-20" id="nav-content">
-               <div class="flex-1 w-full mx-auto max-w-sm content-center py-4 lg:py-0"></div>
-               <ul class="list-reset lg:flex justify-end items-center">
-                  <li class="mr-3 py-2 lg:py-0">
-                     <a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'schoolapp:login' %}">Login</a>
-                  </li>
-               </ul>
+			   <div class="flex-1 w-full mx-auto max-w-sm content-center py-4 lg:py-0"></div>
+			   
+			   {% if user.is_authenticated %}
+				Hi {{ user.username }}!
+				<ul class="list-reset lg:flex justify-end items-center">
+					<li class="mr-3 py-2 lg:py-0">
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'admin:logout' %}">Logout</a>
+						{% csrf_token %}
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'admin:index' %}">Edit</a>
+					</li>
+				</ul>
+				{% else %}
+				<ul class="list-reset lg:flex justify-end items-center">
+					<li class="mr-3 py-2 lg:py-0">
+					   <a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'admin:index' %}">Login</a>
+					</li>
+				</ul>
+				{% endif %}	
             </div>
          </div>
       </nav>
@@ -55,7 +69,7 @@
             <div class="w-full sticky inset-0 hidden h-64 lg:h-auto overflow-x-hidden overflow-y-auto lg:overflow-y-hidden lg:block mt-0 border border-gray-400 lg:border-transparent bg-white shadow lg:shadow-none lg:bg-transparent z-20" style="top:5em;" id="menu-content">
                <ul class="list-reset">
                   <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
-                     <a href="{% url 'schoolapp:schoolclass' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:border-purple-500 lg:hover:border-purple-500">
+                     <a href="{% url 'schoolapp:home' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:border-purple-500 lg:hover:border-purple-500">
                      <span class="pb-1 md:pb-0 text-sm text-gray-900 font-bold">Home</span>
                      </a>
                   </li>
