@@ -83,6 +83,13 @@
                      <span class="pb-1 md:pb-0 text-sm">Profile</span>
                      </a>
                   </li> 
+                  {% if user.username == 'admin' %}
+                  <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
+                     <a href="{% url 'schoolapp:teacher' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:hover:border-gray-400">
+                     <span class="pb-1 md:pb-0 text-sm">Teachers</span>
+                     </a>
+                  </li> 
+               {% endif %}
                </ul>
             </div>
          </div>
@@ -108,7 +115,7 @@
                   <div class="px-8">
                      <h3 class="font-bold text-gray-900">About</h3>
                      <p class="py-4 text-gray-600 text-sm">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel mi ut felis tempus commodo nec id erat. Suspendisse consectetur dapibus velit ut lacinia. 
+                        This is a school manager app, that allows the owner enrol student, add teachers, add classes and set the hourly rate for teachers
                      </p>
                   </div>
                </div>
