@@ -1,12 +1,17 @@
 from django.db import models
 from django import forms
 from enum import unique
+from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import uuid
+from django.db.models.aggregates import Count, Sum
 
 # Create your models here.
 
 class SchoolClass(models.Model):
     schoolclass_name = models.CharField('Class name', max_length = 30)
-    schoolclass_id = models.IntegerField(unique=True)
+    schoolclass_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.schoolclass_name
@@ -16,32 +21,34 @@ class SchoolClass(models.Model):
         verbose_name_plural = 'Classes'
 
 class Teacher(models.Model):
-    first_name = models.CharField('Teacher First name', max_length = 30)
-    last_name = models.CharField('Teacher Last name', max_length = 30)
-    teacher_id = models.IntegerField(unique=True)
-    hourlyRate = models.IntegerField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
-    username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(forms.PasswordInput, max_length=20)
-
+    teacher_first_name = models.CharField('First Name', max_length = 30)
+    teacher_last_name = models.CharField('Last Name', max_length = 30)
+    teacher_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    hourlyRate = models.IntegerField()
+    
     def __str__(self):
-        return self.last_name
+        return self.user.username
     
     class Meta:
         verbose_name = 'Teacher'
         verbose_name_plural = 'Teachers'
-        
+
+    @classmethod
+    def total_user_spend(cls):
+        return cls.objects.aggregate(total='hourlyRate' * Count('lesson'))
+
 class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_first_name = models.CharField('First Name', max_length = 30)
+    student_last_name = models.CharField('Last Name', max_length = 30)
     schoolClass = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
-    first_name = models.CharField('Student First name', max_length = 30)
-    last_name = models.CharField('Student Last name', max_length = 30)
-    enrolNum = models.IntegerField()
-    details = models.TextField('Student Details')
+    student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     attendence = models.BooleanField()
-    student_id = models.IntegerField(unique=True)
 
     def __str__(self):
-        return self.last_name
+        return self.user.username
     
     class Meta:
         verbose_name = 'Student'

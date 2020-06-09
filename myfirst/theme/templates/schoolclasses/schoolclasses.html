@@ -2,26 +2,23 @@
 
 {% block title %}
 
-Title
+School Classes
 
 {% endblock %}
 
 {% block content %}
-
-    {% if schoolclass %}
+    {% if teacher %}
         <table style="width:100%">
             <tr>
                 <th>Class Title</th>
             </tr>
-            {% for a in schoolclass %}
+            {% for a in teacher %}
                 <tr>
-                    <td>{{a.schoolclass_name}}</td>
-                </tr>
+                    <td>{{a.lesson}}</td>
+                </tr>       
             {% endfor %}  
-            </table>
-        </table>
+        </table>  
     {% else %}
         No classes found in the database
     {% endif %}
-
 {% endblock %}

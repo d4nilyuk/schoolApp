@@ -26,7 +26,6 @@ SECRET_KEY = '&)x65=-cpz*4g$g=q#x)45p=$i#0)dbg(7=5sw&byf5!f%(aei'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -127,3 +126,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
+LOGOUT_REDIRECT_URL = 'home/'
+LOGIN_REDIRECT_URL = 'home/'

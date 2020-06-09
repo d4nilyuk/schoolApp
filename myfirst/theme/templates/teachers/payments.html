@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Payments
+
+{% endblock %}
+
+{% block content %}
+
+    {% if student %}
+        <table style="width:100%">
+            <tr>
+                <th>Amount to be paid</th>
+            </tr>
+            <tr>
+                <td><a href="{% url 'schoolapp:salary' a.id %}">{{user.teacher_id}}</a></td>
+            </tr> 
+        </table>  
+    {% else %}
+        No Students found in the database
+    {% endif %}
+{% endblock %}

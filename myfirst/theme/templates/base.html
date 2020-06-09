@@ -1,126 +1,237 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>School Manager</title>
-      <meta name="description" content="">
-      <meta name="keywords" content="">
-	   <link href="https://unpkg.com/tailwindcss@next/dist/tailwind.min.css" rel="stylesheet">
-	   <link rel="stylesheet" href="{% static 'css/main.css' %}">
-      <!--Replace with your tailwind.css once created-->
-      <style>
-         @import url('https://fonts.googleapis.com/css?family=Lato');
-         html { font-family: 'Lato', sans-serif; }
-      </style>
-   </head>
-   <body class="bg-gray-100 tracking-wider tracking-normal">
-      <nav id="header" class="fixed w-full z-10 top-0 bg-white border-b border-gray-400">
-         <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-4">
-            <div class="pl-4 flex items-center">
-               <svg class="h-5 pr-3 fill-current text-purple-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm14 12h4V2H2v12h4c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2zM5 9l2-2 2 2 4-4 2 2-6 6-4-4z"/>
-               </svg>
-               <a class="text-gray-900 text-base no-underline hover:no-underline font-extrabold text-xl"  href="{% url 'schoolapp:home' %}">School Manager</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tailwind Admin Template</title>
+    <meta name="author" content="David Grzyb">
+    <meta name="description" content="">
+
+    <!-- Tailwind -->
+    <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+        .font-family-karla { font-family: karla; }
+        .bg-sidebar { background: #3d68ff; }
+        .cta-btn { color: #3d68ff; }
+        .upgrade-btn { background: #1947ee; }
+        .upgrade-btn:hover { background: #0038fd; }
+        .active-nav-link { background: #1947ee; }
+        .nav-item:hover { background: #1947ee; }
+        .account-link:hover { background: #3d68ff; }
+    </style>
+</head>
+<body class="bg-gray-100 font-family-karla flex">
+
+    <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+        <div class="p-6">
+            <a href="{% url 'schoolapp:home' %}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">SCHOOL MANAGER</a>
+            {% if user %}
+                <p class="text-white text-2xl font-semibold uppercase hover:text-gray-300"><br>{{user.username}}</p>
+            {% endif %}
+        </div>
+        <nav class="text-white text-base font-semibold pt-3">
+            <a href="{% url 'schoolapp:schoolclass' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Classes
+            </a>
+            <a href="{% url 'schoolapp:student' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-table mr-3"></i>
+                Students
+            </a>
+            <a href="{% url 'schoolapp:teacher' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-align-left mr-3"></i>
+                Teachers
+            </a>
+            <a href="{% url 'schoolapp:payments' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-tablet-alt mr-3"></i>
+                Payments
+            </a>
+            <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-calendar mr-3"></i>
+                Timetable
+            </a>
+        </nav>
+    </aside>
+
+    <div class="w-full flex flex-col h-screen overflow-y-hidden">
+        <!-- Desktop Header -->
+        <header class="w-full flex items-center bg-white py-2 px-6 hidden sm:flex">
+            <div class="w-1/2"></div>
+            <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
+                <button @click="isOpen = !isOpen" class="realtive z-12 w-8 h-8 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
+                    {% if user.is_authenticated %}
+                        <img src="https://img.icons8.com/ultraviolet/40/000000/user.png"/>
+                    {% else %}
+                        <img src="https://img.icons8.com/fluent/48/000000/question-mark.png"/>
+                    {% endif %} 
+                </button>
+                <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
+                <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'admin:index' %}" class="block px-4 py-2 account-link hover:text-white">Account</a>
+                        {% csrf_token %}
+                        <a href="{% url 'admin:logout' %}?next=/home" class="block px-4 py-2 account-link hover:text-white">Log Out</a>
+                    {% else %}
+                        <a href="{% url 'schoolapp:login' %}?next=/home" class="block px-4 py-2 account-link hover:text-white">Log In</a>
+                    {% endif %}
+                </div>
             </div>
-            <div class="block lg:hidden pr-4">
-               <button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-900 hover:border-purple-500 appearance-none focus:outline-none">
-                  <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                     <title>Menu</title>
-                     <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
-                  </svg>
-               </button>
+        </header>
+
+        <!-- Mobile Header & Nav -->
+        <header x-data="{ isOpen: false }" class="w-full bg-sidebar py-5 px-6 sm:hidden">
+            <div class="flex items-center justify-between">
+                <a href="#" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
+                <button @click="isOpen = !isOpen" class="text-white text-3xl focus:outline-none">
+                    <i x-show="!isOpen" class="fas fa-bars"></i>
+                    <i x-show="isOpen" class="fas fa-times"></i>
+                </button>
             </div>
-            <div class="w-full flex-grow lg:flex  lg:content-center lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 z-20" id="nav-content">
-			   <div class="flex-1 w-full mx-auto max-w-sm content-center py-4 lg:py-0"></div>
-			   
-			   {% if user.is_authenticated %}
-				Hi {{ user.username }}!
-				<ul class="list-reset lg:flex justify-end items-center">
-					<li class="mr-3 py-2 lg:py-0">
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'admin:logout' %}">Logout</a>
-						{% csrf_token %}
-						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'admin:index' %}">Edit</a>
-					</li>
-				</ul>
-				{% else %}
-				<ul class="list-reset lg:flex justify-end items-center">
-					<li class="mr-3 py-2 lg:py-0">
-					   <a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:underline py-2 px-4" href="{% url 'admin:index' %}">Login</a>
-					</li>
-				</ul>
-				{% endif %}	
-            </div>
-         </div>
-      </nav>
-      <!--Container-->
-      <div class="container w-full flex flex-wrap mx-auto px-2 pt-8 lg:pt-16 mt-16">
-         <div class="w-full lg:w-1/5 lg:px-6 text-xl text-gray-800 leading-normal">
-            <p class="text-base font-bold py-2 lg:pb-6 text-gray-700">Menu</p>
-            <div class="block lg:hidden sticky inset-0">
-               <button id="menu-toggle" class="flex w-full justify-end px-3 py-3 bg-white lg:bg-transparent border rounded border-gray-600 hover:border-purple-500 appearance-none focus:outline-none">
-                  <svg class="fill-current h-3 float-right" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                     <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-                  </svg>
-               </button>
-            </div>
-            <div class="w-full sticky inset-0 hidden h-64 lg:h-auto overflow-x-hidden overflow-y-auto lg:overflow-y-hidden lg:block mt-0 border border-gray-400 lg:border-transparent bg-white shadow lg:shadow-none lg:bg-transparent z-20" style="top:5em;" id="menu-content">
-               <ul class="list-reset">
-                  <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
-                     <a href="{% url 'schoolapp:home' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:border-purple-500 lg:hover:border-purple-500">
-                     <span class="pb-1 md:pb-0 text-sm text-gray-900 font-bold">Home</span>
-                     </a>
-                  </li>
-                  <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
-                     <a href="{% url 'schoolapp:schoolclass' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:hover:border-gray-400">
-                     <span class="pb-1 md:pb-0 text-sm">Classes</span>
-                     </a>
-                  </li>
-                  <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
-                     <a href="{% url 'schoolapp:teacher' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:hover:border-gray-400">
-                     <span class="pb-1 md:pb-0 text-sm">Profile</span>
-                     </a>
-                  </li> 
-                  {% if user.username == 'admin' %}
-                  <li class="py-2 md:my-0 hover:bg-purple-100 lg:hover:bg-transparent">
-                     <a href="{% url 'schoolapp:teacher' %}" class="block pl-4 align-middle text-gray-700 no-underline hover:text-purple-500 border-l-4 border-transparent lg:hover:border-gray-400">
-                     <span class="pb-1 md:pb-0 text-sm">Teachers</span>
-                     </a>
-                  </li> 
-               {% endif %}
-               </ul>
-            </div>
-         </div>
-         <div class="w-full lg:w-4/5 p-8 mt-6 lg:mt-0 text-gray-900 leading-normal bg-white border border-gray-400 border-rounded">
-            <!--Title-->
-            <div class="font-sans">
-               <h1 class="font-sans break-normal text-gray-900 pt-6 pb-2 text-xl">👋 To the School Manager </h1>
-               <hr class="border-b border-gray-400">
-            </div>
-            <!--Post Content-->
-            <!--Lead Para-->
-            <p class="py-6">
-				{% block content %}
+
+            <!-- Dropdown Nav -->
+            <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
+                <a href="index.html" class="flex items-center active-nav-link text-white py-2 pl-4 nav-item">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="blank.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-sticky-note mr-3"></i>
+                    Blank Page
+                </a>
+                <a href="tables.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-table mr-3"></i>
+                    Tables
+                </a>
+                <a href="forms.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-align-left mr-3"></i>
+                    Forms
+                </a>
+                <a href="tabs.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-tablet-alt mr-3"></i>
+                    Tabbed Content
+                </a>
+                <a href="calendar.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-calendar mr-3"></i>
+                    Calendar
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-cogs mr-3"></i>
+                    Support
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-user mr-3"></i>
+                    My Account
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                    <i class="fas fa-sign-out-alt mr-3"></i>
+                    Sign Out
+                </a>
+                <button class="w-full bg-white cta-btn font-semibold py-2 mt-3 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                    <i class="fas fa-arrow-circle-up mr-3"></i> Upgrade to Pro!
+                </button>
+            </nav>
+            <!-- <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                <i class="fas fa-plus mr-3"></i> New Report
+            </button> -->
+        </header>
+    
+        <div class="w-full overflow-x-hidden border-t flex flex-col">
+            <main class="w-full flex-grow p-6">
+                <h1 class="text-3xl text-black pb-6">Dashboard</h1>
+                {% block content %}
 				{% endblock %}
-			</p>
-         </div>
-      </div>
-      <!--/container-->
-      <footer class="bg-white border-t border-gray-400 shadow">
-         <div class="container mx-auto flex py-8">
-            <div class="w-full mx-auto flex flex-wrap">
-               <div class="flex w-full lg:w-1/2 ">
-                  <div class="px-8">
-                     <h3 class="font-bold text-gray-900">About</h3>
-                     <p class="py-4 text-gray-600 text-sm">
-                        This is a school manager app, that allows the owner enrol student, add teachers, add classes and set the hourly rate for teachers
-                     </p>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </footer>
-   </body>
+            </main>
+    
+            <footer class="w-full bg-white text-right p-4">
+                Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">David Grzyb</a>.
+            </footer>
+        </div>
+    </div>
+
+    <!-- AlpineJS -->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha256-KzZiKy0DWYsnwMF+X1DvQngQ2/FxF7MF3Ff72XcpuPs=" crossorigin="anonymous"></script>
+    <!-- ChartJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+
+    <script>
+        var chartOne = document.getElementById('chartOne');
+        var myChart = new Chart(chartOne, {
+            type: 'bar',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var chartTwo = document.getElementById('chartTwo');
+        var myLineChart = new Chart(chartTwo, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
 </html>
