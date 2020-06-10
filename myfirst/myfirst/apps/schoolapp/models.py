@@ -1,32 +1,60 @@
 from django.db import models
 from django import forms
 from enum import unique
-from django.contrib.auth.models import User, AbstractBaseUser, BaseUserManager
-from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 from django.dispatch import receiver
-import uuid
 from django.db.models.aggregates import Count, Sum
+from django.utils import timezone
+from django.contrib.auth.forms import UserCreationForm
+from django.db.models.signals import post_save
 
 # Create your models here.
 
-class SchoolClass(models.Model):
-    schoolclass_name = models.CharField('Class name', max_length = 30)
-    schoolclass_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    def __str__(self):
-        return self.schoolclass_name
+USER_TYPE= [
+    ('student', 'Students'),
+    ('teacher', 'Teachers'),
+    ]
+"""
+class RegistrationForm(UserCreationForm):
+    user_type = forms.ChoiceField(choices=USER_TYPE, widget=forms.RadioSelect)
     
     class Meta:
-        verbose_name = 'Class'
-        verbose_name_plural = 'Classes'
+        model = User
+        fields = [
+            'user_type',
+            'username',
+            'email'
+        ]
+
+    def save(self, commit=True):
+        user = super(RegistrationForm, self).save(commit=True)
+        user.email = self.cleaned_data['email']
+        user.user_type = self.cleaned_data['user_type']
+
+        if commit:
+            user.save()
+
+        return user
+"""
+
+class Lesson(models.Model):
+    lesson_title = models.CharField('Lesson name', max_length = 30)
+
+    def __str__(self):
+        return self.lesson_title
+    
+    class Meta:
+        verbose_name = 'Lesson'
+        verbose_name_plural = 'Lessons'
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    lesson = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
-    teacher_first_name = models.CharField('First Name', max_length = 30)
-    teacher_last_name = models.CharField('Last Name', max_length = 30)
-    teacher_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    lesson = models.ForeignKey(Lesson, on_delete = models.CASCADE)
+    first_name = models.CharField('First Name', max_length = 30)
+    last_name = models.CharField('Last Name', max_length = 30)
     hourlyRate = models.IntegerField()
+    is_student = models.BooleanField('student status', default=False)
+    is_teacher = models.BooleanField('teacher status', default=True)
     
     def __str__(self):
         return self.user.username
@@ -41,10 +69,11 @@ class Teacher(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    student_first_name = models.CharField('First Name', max_length = 30)
-    student_last_name = models.CharField('Last Name', max_length = 30)
-    schoolClass = models.ForeignKey(SchoolClass, on_delete = models.CASCADE)
-    student_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    first_name = models.CharField('First Name', max_length = 30)
+    last_name = models.CharField('Last Name', max_length = 30)
+    lesson = models.ForeignKey(Lesson, on_delete = models.CASCADE)
+    is_student = models.BooleanField('student status', default=True)
+    is_teacher = models.BooleanField('teacher status', default=False)
     attendence = models.BooleanField()
 
     def __str__(self):

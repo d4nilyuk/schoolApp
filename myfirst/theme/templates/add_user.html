@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Login Page
+
+{% endblock %}
+{% load tailwind_filters %}
+
+{% block content %}
+<div class="leading-loose">
+    <h1 class="text-3xl text-black pb-6">Add User</h1>
+    <form class="p-10 bg-white rounded shadow-xl" action="{% url 'schoolapp:add_user'%}" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="mt-6">
+            <button class="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded" type="submit">Add User</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

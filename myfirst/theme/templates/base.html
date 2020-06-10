@@ -9,6 +9,7 @@
 
     <!-- Tailwind -->
     <link href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
+    <link href="../static/css/main.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
         .font-family-karla { font-family: karla; }
@@ -29,29 +30,52 @@
             {% if user %}
                 <p class="text-white text-2xl font-semibold uppercase hover:text-gray-300"><br>{{user.username}}</p>
             {% endif %}
+            {% if user.username == 'admin' %}
+                <a href="{% url 'schoolapp:add_user' %}?next=/home" class="block px-4 py-2 account-link hover:text-white">
+                    <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+                        <i class="fas fa-plus mr-3"></i> Add user
+                    </button>
+                </a>
+            {% endif %}
         </div>
-        <nav class="text-white text-base font-semibold pt-3">
-            <a href="{% url 'schoolapp:schoolclass' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-tachometer-alt mr-3"></i>
-                Classes
-            </a>
+        {% if not user.is_superuser %}  
+            {% if not user.is_student %}  
+                <nav class="text-white text-base font-semibold pt-3">
+                    <a href="{% url 'schoolapp:lesson' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Lessons
+                    </a>
+                    <a href="{% url 'schoolapp:student' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-table mr-3"></i>
+                        Students
+                    </a>
+                    <a href="{% url 'schoolapp:teacher' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-align-left mr-3"></i>
+                        Payment
+                    </a>
+                </nav>
+            {% else %}
+                <nav class="text-white text-base font-semibold pt-3">
+                    <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-calendar mr-3"></i>
+                        Timetable
+                    </a>
+                </nav>
+            {% endif %}
+        {% else %}
             <a href="{% url 'schoolapp:student' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-table mr-3"></i>
                 Students
             </a>
             <a href="{% url 'schoolapp:teacher' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-align-left mr-3"></i>
+                <i class="fas fa-table mr-3"></i>
                 Teachers
             </a>
-            <a href="{% url 'schoolapp:payments' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-tablet-alt mr-3"></i>
-                Payments
+            <a href="{% url 'schoolapp:lesson' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fas fa-tachometer-alt mr-3"></i>
+                Lessons
             </a>
-            <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-calendar mr-3"></i>
-                Timetable
-            </a>
-        </nav>
+        {% endif %}
     </aside>
 
     <div class="w-full flex flex-col h-screen overflow-y-hidden">
@@ -138,7 +162,6 @@
     
         <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
-                <h1 class="text-3xl text-black pb-6">Dashboard</h1>
                 {% block content %}
 				{% endblock %}
             </main>

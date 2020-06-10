@@ -1,14 +1,23 @@
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import redirect, render
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
-
-from.models import Student, Teacher, SchoolClass
+from .models import Student, Teacher, Lesson
 from django.template.response import TemplateResponse
 
 def home(request):
     return TemplateResponse(request, 'home.html', {'redirect_url': 'home.html'})
+
+def add_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST) 
+        if form.is_valid():
+            form.save()
+            return redirect('schoolapp:home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'add_user.html', {'form': form})
 
 def login_view(request):
 
@@ -17,7 +26,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('schoolapp:teacher')
+            return redirect('schoolapp:home')
     else:
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
@@ -30,24 +39,27 @@ def logout_view(request):
 
 def students(request):
     try:
-        student = Student.objects.order_by('student_id')
+        student = Student.objects.order_by('last_name')
     except:
         raise Http404("No students are found")
+
     return render(request, 'students/students.html', {'student': student})
 
 def teachers(request):
     try:
-        teacher = Teacher.objects.order_by('teacher_id')
+        teacher = Teacher.objects.order_by('last_name')
     except:
         raise Http404("No teachers are found")
+
     return render(request, 'teachers/teachers.html', {'teacher': teacher})
 
-def schoolclasses(request):
+def lessons(request):
     try:
-        schoolclass = SchoolClass.objects.order_by('schoolclass_id')
+        lesson = Lesson.objects.order_by('lesson_title')
     except:
-        raise Http404("No classes are found")
-    return render(request, 'schoolclasses/schoolclasses.html', {'schoolclass': schoolclass})
+        raise Http404("No lesson are found")
+
+    return render(request, 'lessons/lessons.html', {'lesson': lesson})
 
 def student_details(request, student_id):
     try:
@@ -65,20 +77,14 @@ def teacher_details(request, teacher_id):
     
     return render(request, 'teachers/teachers.html', {'teacher': a}) 
 
-def schoolclass_details(request, schoolclass_id):
+def lesson_details(request, lesson_id):
     try:
-        a = SchoolClass.objects.get(id = schoolclass_id)
-    except:
-        raise Http404("Class is not found")
+        a = Lesson.objects.get(id = lesson_id)
+    except:                 
+        raise Http404("Lesson is not found")
     
-    return render(request, 'schoolclasses/schoolclasses.html', {'schoolclass': a}) 
+    return render(request, 'lessons/lessons.html', {'lesson': a}) 
 
-def salary(request, teacher_id):
-    try:
-        a = Teacher.total_user_spend(id = teacher_id)
-    except:
-        raise Http404("No Payments is found")
 
-    return render(request, 'teachers/payments.html', {'payment': a}) 
 
 
