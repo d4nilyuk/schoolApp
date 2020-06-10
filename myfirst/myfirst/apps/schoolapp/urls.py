@@ -8,16 +8,10 @@ app_name = 'schoolapp'
 urlpatterns = [
     path('home', views.home, name = 'home'),
     path('', views.home, name='home'),
-
     url(r'^login/$', views.login_view, name='login'),
     url(r'^logout/$', views.logout_view, name='logout'),
     path('add_user', views.add_user, name = 'add_user'),
     path('students', views.students, name = 'student'),
-    path('students/<int:student_id>/', views.student_details, name = 'student_details'),
-
     path('teachers', views.teachers, name = 'teacher'),
-    path('teachers/<int:teacher_id>/', views.teacher_details, name = 'teacher_details'),
-
-    path('Lessons', views.lessons, name = 'lesson'),
-    path('Lessons/<int:lesson_id>/', views.lesson_details, name = 'lesson_details')
+    path('lessons', views.lessons, name = 'lesson'),
 ]

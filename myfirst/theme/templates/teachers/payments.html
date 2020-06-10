@@ -2,22 +2,52 @@
 
 {% block title %}
 
-Payments
+School Classes
 
 {% endblock %}
-
+{% load mathfilters %}
 {% block content %}
+    {% if lesson %}
+    <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
+        <main class="w-full flex-grow p-6">
+            <h1 class="text-3xl text-black pb-6">Payments</h1>
 
-    {% if student %}
-        <table style="width:100%">
-            <tr>
-                <th>Amount to be paid</th>
-            </tr>
-            <tr>
-                <td><a href="{% url 'schoolapp:salary' a.id %}">{{user.teacher_id}}</a></td>
-            </tr> 
-        </table>  
+            <div class="w-full mt-6">
+                <p class="text-xl pb-3 flex items-center">
+                    <i class="fas fa-list mr-3"></i>Payments Information
+                </p>
+                <div class="bg-white overflow-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">First Name</th>
+                                <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Last Name</th>
+                                <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Amount to be payed</th>
+                                <th class="w-1/3 text-left py-3 px-4 uppercase font-semibold text-sm">Num of Lessons</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr>
+                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{user.teacher.first_name}}</a></td>    
+                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{user.teacher.last_name}}</a></td>    
+                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{user.teacher.hourlyRate|mul:user.teacher.lesson_set.count}}$</a></td>                  
+                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{user.teacher.lesson_set.count}}</a></td>   
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="pt-3 text-gray-600">
+                    Source: <a class="underline" href="https://tailwindcomponents.com/component/striped-table">https://tailwindcomponents.com/component/striped-table</a>
+                </p>
+            </div>
+        </main>
+
+        <footer class="w-full bg-white text-right p-4">
+            Built by <a target="_blank" href="https://davidgrzyb.com" class="underline">David Grzyb</a>.
+        </footer>
+    </div>
     {% else %}
-        No Students found in the database
+        No Payments
     {% endif %}
 {% endblock %}
+    

@@ -9,47 +9,27 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models.signals import post_save
 
 # Create your models here.
-
-USER_TYPE= [
-    ('student', 'Students'),
-    ('teacher', 'Teachers'),
-    ]
-"""
 class RegistrationForm(UserCreationForm):
-    user_type = forms.ChoiceField(choices=USER_TYPE, widget=forms.RadioSelect)
-    
     class Meta:
         model = User
         fields = [
-            'user_type',
+            'is_staff',
             'username',
-            'email'
+            'email',
         ]
 
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=True)
         user.email = self.cleaned_data['email']
-        user.user_type = self.cleaned_data['user_type']
+        user.is_stuff = self.cleaned_data['is_staff']
 
         if commit:
             user.save()
 
         return user
-"""
-
-class Lesson(models.Model):
-    lesson_title = models.CharField('Lesson name', max_length = 30)
-
-    def __str__(self):
-        return self.lesson_title
-    
-    class Meta:
-        verbose_name = 'Lesson'
-        verbose_name_plural = 'Lessons'
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    lesson = models.ForeignKey(Lesson, on_delete = models.CASCADE)
     first_name = models.CharField('First Name', max_length = 30)
     last_name = models.CharField('Last Name', max_length = 30)
     hourlyRate = models.IntegerField()
@@ -58,14 +38,21 @@ class Teacher(models.Model):
     
     def __str__(self):
         return self.user.username
-    
+
     class Meta:
         verbose_name = 'Teacher'
         verbose_name_plural = 'Teachers'
+    
+class Lesson(models.Model):
+    lesson_title = models.CharField('Lesson title', max_length = 30, primary_key=True)
+    teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
 
-    @classmethod
-    def total_user_spend(cls):
-        return cls.objects.aggregate(total='hourlyRate' * Count('lesson'))
+    def __str__(self):
+        return self.lesson_title
+    
+    class Meta:
+        verbose_name = 'Lesson'
+        verbose_name_plural = 'Lessons'
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
