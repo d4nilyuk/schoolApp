@@ -40,11 +40,11 @@ def logout_view(request):
 
 def students(request):
     try:
-        student = Student.objects.order_by('last_name')
+        a = Student.objects.order_by('last_name')
     except:
         raise Http404("No students are found")
 
-    return render(request, 'students/students.html', {'student': student})
+    return render(request, 'students/students.html', {'student': a})
 
 def teachers(request):
     try:
@@ -61,3 +61,11 @@ def lessons(request):
         raise Http404("No lesson are found")
 
     return render(request, 'lessons/lessons.html', {'lesson': lesson})
+
+def timetable(request):
+    try:
+        lesson = Lesson.objects.order_by('lesson_title')
+    except:
+        raise Http404("No lesson are found")
+
+    return render(request, 'students/timetable.html', {'lesson': lesson})

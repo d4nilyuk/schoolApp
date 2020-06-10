@@ -27,11 +27,13 @@ Students
                         </thead>
                         <tbody class="text-gray-700">
                             {% for a in student %}
-                            <tr>
-                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:student_details' a.id %}">{{a.first_name}}</a></td>   
-                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:student_details' a.id %}">{{a.last_name}}</a></td>                            
-                                <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:student_details' a.id %}">{{a.lesson}}</a></td>
-                            </tr>
+                                {% if a.lesson == user.lesson_title%}
+                                    <tr>
+                                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{a.first_name}}</a></td>   
+                                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{a.last_name}}</a></td>                            
+                                        <td class="text-left py-3 px-4"><a class="hover:text-blue-500" href="{% url 'schoolapp:lesson' %}">{{a.lesson}}</a></td>                                            
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                         </tbody>
                     </table>

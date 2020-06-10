@@ -44,7 +44,7 @@ class Teacher(models.Model):
         verbose_name_plural = 'Teachers'
     
 class Lesson(models.Model):
-    lesson_title = models.CharField('Lesson title', max_length = 30, primary_key=True)
+    lesson_title = models.CharField('Lesson title', max_length = 30)
     teacher = models.ForeignKey(Teacher, on_delete = models.CASCADE)
 
     def __str__(self):
