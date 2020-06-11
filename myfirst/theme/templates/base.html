@@ -23,7 +23,6 @@
     </style>
 </head>
 <body class="bg-gray-100 font-family-karla flex">
-
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
             <a href="{% url 'schoolapp:home' %}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">SCHOOL MANAGER</a>
@@ -38,39 +37,56 @@
                 </a>
             {% endif %}
         </div>
-        {% if not user.is_superuser %}  
-            <nav class="text-white text-base font-semibold pt-3">
+        {% if user.is_authenticated %}
+            {% if not user.is_superuser %}  
+                <nav class="text-white text-base font-semibold pt-3">
+                    <a href="{% url 'schoolapp:student' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-table mr-3"></i>
+                        Students
+                    </a>
+                    <a href="{% url 'schoolapp:timetable' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                        <i class="fas fa-calendar mr-3"></i>
+                        Timetable
+                    </a>
+                    {% if request.user.is_staff %}
+                        <a href="{% url 'schoolapp:lesson' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                            <i class="fas fa-sticky-note mr-3"></i>
+                            Payment
+                        </a>
+                    {% endif %}
+                </nav>
+            {% else %}
                 <a href="{% url 'schoolapp:student' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                     <i class="fas fa-table mr-3"></i>
                     Students
                 </a>
-                <a href="{% url 'schoolapp:timetable' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <a href="{% url 'schoolapp:teacher' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-tablet-alt mr-3"></i>
+                    Teachers
+                </a>
+                <a href="{% url 'schoolapp:lesson' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-calendar mr-3"></i>
+                    Lessons
+                </a>
+            {% endif %}
+        {% else %}
+            <nav class="text-white text-base font-semibold pt-3">
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <i class="fas fa-table mr-3"></i>
+                    Students
+                </a>
+                <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                     <i class="fas fa-calendar mr-3"></i>
                     Timetable
                 </a>
-                {% if request.user.is_staff %}
-                    <a href="{% url 'schoolapp:lesson' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                    <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                         <i class="fas fa-sticky-note mr-3"></i>
                         Payment
                     </a>
-                {% endif %}
             </nav>
-        {% else %}
-            <a href="{% url 'schoolapp:student' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-table mr-3"></i>
-                Students
-            </a>
-            <a href="{% url 'schoolapp:teacher' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-tablet-alt mr-3"></i>
-                Teachers
-            </a>
-            <a href="{% url 'schoolapp:lesson' %}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
-                <i class="fas fa-calendar mr-3"></i>
-                Lessons
-            </a>
         {% endif %}
     </aside>
-
+    
     <div class="w-full flex flex-col h-screen overflow-y-hidden">
         <!-- Desktop Header -->
         <header class="w-full flex items-center bg-white py-2 px-6 hidden sm:flex">
