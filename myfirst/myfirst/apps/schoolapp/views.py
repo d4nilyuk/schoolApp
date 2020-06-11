@@ -64,8 +64,8 @@ def lessons(request):
 
 def timetable(request):
     try:
-        lesson = Lesson.objects.order_by('lesson_title')
+        timetable = Lesson.objects.order_by('lesson_title')
     except:
         raise Http404("No lesson are found")
 
-    return render(request, 'students/timetable.html', {'lesson': lesson})
+    return render(request, 'students/timetable.html', {'timetable': timetable})
