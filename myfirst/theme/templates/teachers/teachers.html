@@ -7,7 +7,7 @@ Teachers
 {% endblock %}
 {% load mathfilters %}
 {% block content %}
-    {% if lesson %}
+    {% if teacher %}
     <div class="w-full h-screen overflow-x-hidden border-t flex flex-col">
         <main class="w-full flex-grow p-6">
             <h1 class="text-3xl text-black pb-6">List of Teachers</h1>
@@ -45,7 +45,7 @@ Teachers
         </footer>
     </div>
     {% else %}
-        No lessons found in the timetable
+        No teachers found in the timetable
     {% endif %}
 {% endblock %}
     
